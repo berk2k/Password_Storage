@@ -5,7 +5,7 @@ namespace Password_Storage.Api.Context
 {
     public class PasswordDbContext : DbContext
     {
-        public PasswordDbContext(DbContextOptions<DbContext> options) : base(options)
+        public PasswordDbContext(DbContextOptions<PasswordDbContext> options) : base(options)
         {
         }
 
