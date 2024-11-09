@@ -92,6 +92,23 @@ namespace Password_Storage.Api.Services
             }
         }
 
+        public async Task DeletePasswordByAccNameAsync(string accountName)
+        {
+            
+            var passwordEntry = await _context.passwordstorage.FirstOrDefaultAsync(p => p.account_name == accountName);
+
+            
+            if (passwordEntry == null)
+            {
+                throw new Exception("Account not found");
+            }
+
+            
+            _context.passwordstorage.Remove(passwordEntry);
+            await _context.SaveChangesAsync();
+        }
+
+
         public async Task UpdatePasswordAsync(int id, PasswordDto passwordDto)
         {
             var existingPassword = await _context.passwordstorage.FindAsync(id);
@@ -239,10 +256,7 @@ namespace Password_Storage.Api.Services
             }
         }
 
-
-
-
-
+        
     }
 
 }

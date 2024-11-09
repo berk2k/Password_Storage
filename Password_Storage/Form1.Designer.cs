@@ -9,6 +9,7 @@
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnLoad;
         private System.Windows.Forms.DataGridView dgvPasswords;
+        private System.Windows.Forms.Button btnDelete;
 
         protected override void Dispose(bool disposing)
         {
@@ -27,6 +28,8 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.btnLoad = new System.Windows.Forms.Button();
             this.dgvPasswords = new System.Windows.Forms.DataGridView();
+            this.btnDelete = new System.Windows.Forms.Button();  // Add Delete Button initialization
+
             ((System.ComponentModel.ISupportInitialize)(this.dgvPasswords)).BeginInit();
             this.SuspendLayout();
 
@@ -78,6 +81,15 @@
             this.dgvPasswords.Size = new System.Drawing.Size(360, 150);
             this.dgvPasswords.TabIndex = 5;
 
+            // btnDelete
+            this.btnDelete.Location = new System.Drawing.Point(220, 99);  // Positioning next to Save button
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(150, 23);
+            this.btnDelete.TabIndex = 6;
+            this.btnDelete.Text = "Delete";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+
             // Form1
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -85,14 +97,17 @@
             this.Controls.Add(this.dgvPasswords);
             this.Controls.Add(this.btnLoad);
             this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.btnDelete);  // Add Delete Button to the form
             this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.txtUsername);
             this.Controls.Add(this.txtAccount);
             this.Name = "Form1";
             this.Text = "Password Storage";
+
             ((System.ComponentModel.ISupportInitialize)(this.dgvPasswords)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
     }
 }

@@ -13,6 +13,8 @@ namespace Password_Storage.Api.Services.IServices
         Task UpdatePasswordAsync(int id,PasswordDto password);
         Task DeletePasswordAsync(int id);
 
+        Task DeletePasswordByAccNameAsync(string accountname);
+
         public string DecryptPassword(string encryptedPassword);
 
         public string EncryptPassword(string plainTextPassword);

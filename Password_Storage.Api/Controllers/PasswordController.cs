@@ -17,7 +17,7 @@ namespace Password_Storage.Api.Controllers
             _passwordService = passwordService;
         }
 
-        // GET: api/password
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PasswordDto>>> GetPasswords()
         {
@@ -25,7 +25,7 @@ namespace Password_Storage.Api.Controllers
             return Ok(passwords);
         }
 
-        // GET: api/password/5
+        
         [HttpGet("{id}")]
         public async Task<ActionResult<PasswordDto>> GetPasswordById(int id)
         {
@@ -37,7 +37,7 @@ namespace Password_Storage.Api.Controllers
             return Ok(password);
         }
 
-        // POST: api/password
+        
         [HttpPost]
         public async Task<ActionResult> AddPassword(PasswordDto passwordDto)
         {
@@ -56,11 +56,11 @@ namespace Password_Storage.Api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message); // Handle the exception and return a bad request
+                return BadRequest(ex.Message); 
             }
         }
 
-        // DELETE: api/password/5
+        
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeletePassword(int id)
         {
@@ -71,9 +71,26 @@ namespace Password_Storage.Api.Controllers
             }
             catch (Exception ex)
             {
-                return NotFound(ex.Message); // Return 404 Not Found if the entry does not exist
+                return NotFound(ex.Message);
             }
         }
+
+        [HttpDelete("delete/{accountName}")]
+        public async Task<IActionResult> DeletePasswordByAccName(string accountName)
+        {
+            try
+            {
+                // Servis üzerinden şifreyi account name'e göre siliyoruz
+                await _passwordService.DeletePasswordByAccNameAsync(accountName);
+                return Ok("Password entry deleted successfully");
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+
 
         [HttpPost("encrypt")]
         public ActionResult<string> EncryptPasswords([FromBody] string plainTextPassword)
