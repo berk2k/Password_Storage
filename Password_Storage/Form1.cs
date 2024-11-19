@@ -12,6 +12,7 @@ namespace Password_Storage
         public Form1()
         {
             InitializeComponent();
+            LoadAccounts();
         }
 
         
@@ -42,6 +43,23 @@ namespace Password_Storage
             LoadPasswords();
         }
 
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            
+            string selectedAccount = cmbAccounts.SelectedItem?.ToString();
+
+            if (!string.IsNullOrEmpty(selectedAccount))
+            {
+                
+                SearchPasswordByAccountNameAsync(selectedAccount);
+            }
+            else
+            {
+                MessageBox.Show("Please select an account.");
+            }
+        }
+
+
         private void btnDelete_Click(object sender, EventArgs e)
         {
             // Ensure a row is selected
@@ -67,6 +85,31 @@ namespace Password_Storage
                 MessageBox.Show("Please select a row to delete.");
             }
         }
+        private void cmbAccounts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            string selectedAccount = cmbAccounts.SelectedItem.ToString();
+            SearchPasswordByAccountNameAsync(selectedAccount);
+        }
+
+        
+        private async void SearchPasswordByAccountNameAsync(string accountName)
+        {
+            var client = new HttpClient();
+            var response = await client.GetAsync($"https://localhost:7162/api/Password/search/{accountName}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                var passwords = JsonConvert.DeserializeObject<List<PasswordDto>>(result);
+
+                dgvPasswords.DataSource = passwords;
+            }
+            else
+            {
+                MessageBox.Show("Failed to load passwords for the selected account.");
+            }
+        }
 
         // Method to call the API and delete the password by account name
         private async void DeletePasswordByAccountName(string accountName)
@@ -83,6 +126,24 @@ namespace Password_Storage
             else
             {
                 MessageBox.Show("Error deleting password");
+            }
+        }
+
+        private async void LoadAccounts()
+        {
+            var client = new HttpClient();
+            var response = await client.GetAsync($"https://localhost:7162/api/Password/accounts");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                var accounts = JsonConvert.DeserializeObject<List<string>>(result);
+
+                cmbAccounts.DataSource = accounts; 
+            }
+            else
+            {
+                MessageBox.Show("Failed to load accounts.");
             }
         }
 
