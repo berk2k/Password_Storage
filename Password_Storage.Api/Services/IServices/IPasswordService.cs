@@ -18,5 +18,8 @@ namespace Password_Storage.Api.Services.IServices
         public string DecryptPassword(string encryptedPassword);
 
         public string EncryptPassword(string plainTextPassword);
+
+        Task<IEnumerable<string>> GetAllAccountNamesAsync();
+        Task<IEnumerable<PasswordDto>> GetPasswordsByAccountNameAsync(string accountName);
     }
 }

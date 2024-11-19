@@ -105,5 +105,20 @@ namespace Password_Storage.Api.Controllers
             var decryptedPassword = _passwordService.DecryptPassword(encryptedPassword);
             return Ok(decryptedPassword);
         }
+
+        [HttpGet("accounts")]
+        public async Task<IActionResult> LoadAccounts()
+        {
+            var accountNames = await _passwordService.GetAllAccountNamesAsync();
+            return Ok(accountNames);
+        }
+
+        
+        [HttpGet("search/{accountName}")]
+        public async Task<IActionResult> SearchPasswordByAccountName(string accountName)
+        {
+            var passwords = await _passwordService.GetPasswordsByAccountNameAsync(accountName);
+            return Ok(passwords);
+        }
     }
 }

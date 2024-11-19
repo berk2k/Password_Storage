@@ -55,6 +55,35 @@ namespace Password_Storage.Api.Services
             }
         }
 
+        public async Task<IEnumerable<PasswordDto>> GetPasswordsByAccountNameAsync(string accountName)
+        {
+            try
+            {
+                var passwordEntities = await _context.passwordstorage
+                                                        .Where(p => p.account_name == accountName)
+                                                        .ToListAsync();
+
+                var passwords = passwordEntities.Select(p => new PasswordDto
+                {
+                    AccountName = p.account_name,
+                    Username = p.username,
+                    Password = DecryptPassword(p.password_hash) // Şifreyi burada çözüyoruz
+                });
+
+                return passwords;
+
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (or handle it as needed)
+                Console.WriteLine($"Hata oluştu: {ex.Message}");
+                throw new InvalidOperationException("Şifreleri alırken bir hata oluştu.", ex);
+            }
+            
+
+            
+        }
+
         public async Task<PasswordDto> GetPasswordByIdAsync(int id)
         {
             try
@@ -66,11 +95,11 @@ namespace Password_Storage.Api.Services
                     {
                         AccountName = password.account_name,
                         Username = password.username,
-                        Password = DecryptPassword(password.password_hash) // Decrypt the password here
+                        Password = DecryptPassword(password.password_hash)
                     };
                 }
 
-                throw new KeyNotFoundException("Şifre bulunamadı."); // Veya uygun bir şekilde ele alın
+                throw new KeyNotFoundException("Şifre bulunamadı.");
             }
             catch (Exception ex)
             {
@@ -254,6 +283,14 @@ namespace Password_Storage.Api.Services
             {
                 throw new InvalidOperationException("Bilinmeyen bir hata oluştu.", ex);
             }
+        }
+
+        public async Task<IEnumerable<string>> GetAllAccountNamesAsync()
+        {
+            return await _context.passwordstorage
+                             .Select(p => p.account_name)
+                             .Distinct()
+                             .ToListAsync();
         }
 
         
